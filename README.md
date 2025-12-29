@@ -1,9 +1,14 @@
 
+# openbooks-api
 
-# ScrapeBackend API
+**openbooks-api** is an open-source backend platform that ingests publicly available book metadata from a demo source designed for scraping practice and exposes it through clean, well-documented REST APIs for learning, experimentation, and backend system design practic
 
-**ScrapeBackend API** is a Node.js-based API service designed to scrape and store data from websites. It provides an easy-to-use interface to interact with scraped data and enables both real-time scraping and data retrieval from a MongoDB database.
+# Data Source
 
+This project currently ingests data from https://books.toscrape.com
+, a public demo website explicitly created for web scraping practice.
+
+The platform is intended for educational, learning, and open-source experimentation purposes only.
 ---
 
 ## Table of Contents
@@ -28,7 +33,7 @@
 
 ## Installation
 
-Follow the steps below to get the **ScrapeBackend API** up and running:
+Follow the steps below to get the **openbooks-api** up and running:
 
 ### Prerequisites
 
@@ -119,7 +124,7 @@ GET http://localhost:5000/api/scrape/books
 
 ## Contributing
 
-We welcome contributions to **ScrapeBackend API**! If you'd like to help improve this project, follow these steps:
+We welcome contributions to **openbooks-api**! If you'd like to help improve this project, follow these steps:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/your-feature`).
