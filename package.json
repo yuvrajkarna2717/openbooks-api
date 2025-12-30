@@ -1,8 +1,8 @@
 {
-  "name": "scrapebackend-api",
+  "name": "openbooks-api",
   "version": "1.0.0",
   "author": "Yuvraj Karna",
-  "description": "A Node.js-based web scraper API that uses Puppeteer for scraping data from websites and stores the results in MongoDB. Includes endpoints for fetching stored data or performing real-time scrapes.",
+  "description": "openbooks-api is an open-source backend platform that ingests publicly available book metadata from a demo source designed for scraping practice and exposes it through clean, well-documented REST APIs for learning, experimentation, and backend system design practice.",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -34,7 +34,8 @@
     "express": "^4.19.2",
     "mongoose": "^8.9.2",
     "puppeteer": "^23.1.0",
-    "redis": "^4.7.0"
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^2.1.8",
