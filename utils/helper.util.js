@@ -1,4 +1,4 @@
-import Book from "../models/bookModel.js";
+import Book from "../models/book.model.js";
 
 const sanitizeAllBookDetails = async (allBookDetails) => {
   const mapRatingToNumber = (rating) => {
