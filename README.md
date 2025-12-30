@@ -1,64 +1,135 @@
+# 📚 OpenBooks API
 
-# openbooks-api
+**OpenBooks API** is an open-source backend platform that ingests publicly available book metadata from a demo source designed for scraping practice and exposes it through clean, well-documented REST APIs. The project focuses on real-world backend system design, including data ingestion, API usability, performance optimization, and maintainability.
 
-**openbooks-api** is an open-source backend platform that ingests publicly available book metadata from a demo source designed for scraping practice and exposes it through clean, well-documented REST APIs for learning, experimentation, and backend system design practic
-
-# Data Source
-
-This project currently ingests data from https://books.toscrape.com
-, a public demo website explicitly created for web scraping practice.
-
-The platform is intended for educational, learning, and open-source experimentation purposes only.
----
-
-## Table of Contents
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
+Rather than treating scraping as the end goal, this project models how production systems collect external data, normalize it, store it reliably, and make it accessible to other services or developers via stable APIs.
 
 ---
 
-## Features
+## ✨ Key Features
 
-- **Web Scraping**: Leverage Puppeteer to scrape data from websites.
-- **Real-Time Data Fetching**: Scrape and serve data directly from websites.
-- **Database Integration**: Store scraped data in a Supabase PostgreSQL database for persistent access.
-- **Flexible API**: Expose endpoints for retrieving and managing scraped data.
-- **Modular Design**: Easily extend and integrate with other systems.
+* RESTful APIs for consuming book data
+* Pagination, filtering, sorting, and search
+* Rate limiting for API protection
+* Swagger (OpenAPI) documentation
+* Database migrations with Knex.js
+* CORS support for cross-origin requests
+* Robust error handling and logging
+* Comprehensive test suite
+* Open-source and contributor-friendly
 
 ---
 
-## Installation
+## 📊 Dataset
 
-Follow the steps below to get the **openbooks-api** up and running:
+* **Source:** [https://books.toscrape.com](https://books.toscrape.com)
+* **Records:** 1,000+ books across 50 pages
+* **Purpose:** Educational and system design practice
 
-### Prerequisites
+> ⚠️ The data source is a public demo website explicitly created for web scraping practice.
 
-Make sure you have the following installed:
-- **Node.js** (v14+)
-- **Supabase Account** (for PostgreSQL database)
+---
 
-### 1. Clone the Repository
+## 🧱 Tech Stack
+
+* **Backend:** Node.js, Express
+* **Database:** Supabase (PostgreSQL)
+* **Query Builder:** Knex.js
+* **Web Scraping:** Puppeteer
+* **Documentation:** Swagger (OpenAPI)
+* **Testing:** Vitest
+* **Containerization:** Docker
+* **CI/CD:** Github Actions
+
+---
+
+## 📌 API Overview
+
+![Swagger API Documentation](./assets/swagger-api-docs.png)
+
+### Core Fetch APIs
+
+* `GET /api/fetch/all-books`
+  Returns all books with optional pagination and filtering.
+
+* `GET /api/fetch/books/title?title=search`
+  Search books by title with case-insensitive matching.
+
+* `GET /api/fetch/books/price-range?minPrice=10&maxPrice=50`
+  Filter books within specified price range.
+
+* `GET /api/fetch/books/rating-range?minR=3&maxR=5`
+  Filter books by rating range.
+
+### Utility APIs
+
+* `GET /api/fetch/books/limit?limit=10`
+  Paginate results with specified limit.
+
+* `GET /api/fetch/books/sort?sortBy=price&orderBy=asc&limit=20`
+  Sort books by price or rating with pagination.
+
+### Data Ingestion APIs
+
+* `POST /api/scrape/save/all-books-details`
+  Scrape and persist book data to database.
+
+* `GET /api/scrape/all-books-details`
+  Scrape and return data without persistence.
+
+> The API surface is intentionally kept small and expressive to reflect real-world REST API design.
+
+---
+
+## 📖 API Documentation
+
+The API is fully documented using **Swagger (OpenAPI)**.
+
+* **Swagger UI:**
+
+  ```
+  http://localhost:<PORT>/docs
+  ```
+
+All endpoints, query parameters, and responses can be explored and tested directly from the browser.
+
+---
+
+## 🧠 System Design Highlights
+
+* Data ingestion treated as a background pipeline, not a one-off script
+* Relational schema with indexed fields for performance
+* Rate limiting to protect public APIs
+* Clear separation between ingestion and consumption layers
+* Modular architecture with proper separation of concerns
+* Environment-based configuration management
+
+---
+
+## 🧪 Local Development
+
+### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/YuvrajKarna/ScrapeBackend-API.git
-cd ScrapeBackend-API
+git clone https://github.com/yuvrajkarna2717/openbooks-api.git
+cd openbooks-api
 ```
 
-### 2. Install Dependencies
+### 2️⃣ Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Configure Environment Variables
-
-Create a `.env` file in the root directory and set the following environment variables:
+### 3️⃣ Configure Environment Variables
 
 ```bash
+cp .example.env .env
+```
+
+Update the values with your Supabase credentials:
+
+```env
 SUPABASE_URL=your_supabase_project_url
 SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_DB_URL=postgresql://postgres:[password]@db.[project-ref].supabase.co:5432/postgres
@@ -67,95 +138,94 @@ WEBSITE_URL=https://books.toscrape.com
 MAX_REQUEST_PER_IP=100
 ```
 
-Replace the Supabase values with your actual Supabase project credentials.
-
-### 4. Run Database Migrations
+### 4️⃣ Setup Database
 
 ```bash
 npm run migrate
 ```
 
-### 5. Run the Development Server
+### 5️⃣ Run the Server
 
 ```bash
 npm run devStart
 ```
 
-This will start the server on the specified port (`5000` by default) with hot reloading enabled.
-
 ---
 
-## Usage
-
-Once the server is running, you can interact with the API via HTTP requests. The API supports both real-time scraping and retrieving stored data.
-
-### Example Request (GET)
-
-To get a list of all scraped books from the database:
+## 🐳 Docker (Planned)
 
 ```bash
-GET http://localhost:5000/api/scrape/books
+docker build -t openbooks-api .
+docker run -p 5000:5000 openbooks-api
 ```
 
 ---
 
-## API Endpoints
+## 🧪 Testing
 
-### `/api/scrape/books` [GET]
-- **Description**: Fetch all scraped book details from the database.
-- **Response**: Returns an array of book objects.
-
-```json
-[
-  {
-    "title": "A Light in the Attic",
-    "price": "£51.77",
-    "stock": "In Stock",
-    "rating": "Three",
-    "link": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
-    "stockInfo": "In stock (22 available)",
-    "imageLink": "https://books.toscrape.com/media/cache/fe/72/fe72f0532301ec28892ae79a629a293c.jpg"
-  },
-  ...
-]
+```bash
+npm test              # Run all tests
+npm run test:watch    # Watch mode
+npm run test:coverage # Coverage report
 ```
 
-### `/api/scrape/real-time` [POST]
-- **Description**: Scrapes data from a provided URL and returns the result.
-- **Request Body**:
-  ```json
-  {
-    "url": "https://example.com"
-  }
-  ```
-- **Response**: Returns the scraped data from the provided URL.
+---
+
+## 🤝 Contributing
+
+Contributions are welcome 🎉
+
+You can help by:
+
+* Improving API documentation
+* Adding new filters or aggregations
+* Optimizing database queries
+* Writing comprehensive tests
+* Enhancing error handling
+
+Please see [`CONTRIBUTING.md`](./CONTRIBUTING.md) for guidelines.
 
 ---
 
-## Contributing
+## 🧭 Roadmap
 
-We welcome contributions to **openbooks-api**! If you'd like to help improve this project, follow these steps:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature`).
-3. Make your changes and commit them (`git commit -am 'Add new feature'`).
-4. Push to your branch (`git push origin feature/your-feature`).
-5. Create a pull request.
-
-Please ensure your code is well-tested and follows the project's coding conventions.
+* [ ] Redis caching for read-heavy endpoints
+* [ ] Scheduled data refresh using GitHub Actions
+* [ ] Enhanced analytics and aggregation endpoints
+* [ ] Data quality validation checks
+* [ ] Public Docker image
+* [ ] Performance monitoring and metrics
 
 ---
 
-## License
+## ⚖️ Ethical Data Collection
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+* Uses a public demo website created for scraping practice
+* No authentication, paywalls, or private data involved
+* Requests are rate-limited to be respectful
+* Intended strictly for educational and open-source use
+* Follows robots.txt guidelines and best practices
 
 ---
 
-### Additional Notes:
+## 📄 License
 
-- **Scalability**: The project is designed to scale easily. You can extend it to support more complex scraping logic, additional APIs, or more databases.
-- **Error Handling**: Ensure you add proper error handling in your own code when interacting with the API.
-- **Puppeteer**: Scraping performance can depend on the complexity of the target website. Puppeteer is used here for headless browser-based scraping, but you may need to tweak it for certain sites.
+This project is licensed under the **MIT License**.
+
+---
+
+## 🙌 Why This Project Exists
+
+OpenBooks API was built to practice and demonstrate **real backend system design**—where data ingestion is only the first step, and the real challenge lies in building reliable, performant, and maintainable APIs that others can use and extend.
+
+The project showcases:
+- **Clean Architecture**: Separation of concerns with proper layering
+- **API Design**: RESTful principles with consistent response formats
+- **Data Management**: Proper database design with migrations
+- **Error Handling**: Comprehensive error management and logging
+- **Testing**: Test-driven development practices
+- **Documentation**: Self-documenting APIs with Swagger
+
+This serves as a practical example for backend engineers learning system design, API development, and modern Node.js practices.
 
 ---
