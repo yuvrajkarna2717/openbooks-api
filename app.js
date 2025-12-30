@@ -7,6 +7,7 @@ import swaggerSpec from "./docs/swagger.js";
 
 import { rateLimiter } from "./middlewares/rate-limit.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import { notFound } from "./middlewares/not-found.middleware.js";
 
 // book controller to scrape book details and save to DB
 import { bookController } from "./routes/scrape-book.routes.js";
@@ -57,6 +58,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// 404 handler for unmatched routes
+app.use(notFound);
 
 // Error handling middleware
 app.use(errorHandler);
