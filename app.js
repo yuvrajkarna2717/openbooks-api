@@ -6,6 +6,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./docs/swagger.js";
 
 import { rateLimiter } from "./middlewares/rate-limit.middleware.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
 
 // book controller to scrape book details and save to DB
 import { bookController } from "./routes/scrape-book.routes.js";
@@ -57,9 +58,7 @@ app.get("/", (req, res) => {
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Error handling middleware (optional)
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
-});
+// Error handling middleware
+app.use(errorHandler);
 
 export { app };
