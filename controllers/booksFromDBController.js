@@ -33,7 +33,7 @@ const getBooksByTitle = async (req, res) => {
 
     // Use a case-insensitive regex to find books with a matching title
     const books = await Book.find({
-      title: { $regex: title, $options: "i" },
+      title: { $regex: title }
     });
 
     if (books.length === 0) {
@@ -179,7 +179,7 @@ const getBooksByLimit = async (req, res) => {
       });
     }
 
-    const result = await Book.find().limit(limit);
+    const result = await Book.findWithLimit(limit);
     res.status(200).json({
       status: 200,
       message: `${limit} book(s) details fetched.`,
@@ -233,9 +233,7 @@ const getBooksBySorting = async (req, res) => {
     const sortOrder = ascOrderRegex.test(orderBy) ? 1 : -1;
     const sortField = priceRegex.test(sortBy) ? "price" : "rating";
 
-    const result = await Book.find()
-      .limit(limit)
-      .sort({ [sortField]: sortOrder });
+    const result = await Book.findWithSort(sortField, sortOrder, limit);
 
     res.status(200).json({
       status: 200,

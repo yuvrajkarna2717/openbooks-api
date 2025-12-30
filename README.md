@@ -25,7 +25,7 @@ The platform is intended for educational, learning, and open-source experimentat
 
 - **Web Scraping**: Leverage Puppeteer to scrape data from websites.
 - **Real-Time Data Fetching**: Scrape and serve data directly from websites.
-- **Database Integration**: Store scraped data in a MongoDB database for persistent access.
+- **Database Integration**: Store scraped data in a Supabase PostgreSQL database for persistent access.
 - **Flexible API**: Expose endpoints for retrieving and managing scraped data.
 - **Modular Design**: Easily extend and integrate with other systems.
 
@@ -39,7 +39,7 @@ Follow the steps below to get the **openbooks-api** up and running:
 
 Make sure you have the following installed:
 - **Node.js** (v14+)
-- **MongoDB** (local or cloud, such as MongoDB Atlas)
+- **Supabase Account** (for PostgreSQL database)
 
 ### 1. Clone the Repository
 
@@ -59,13 +59,22 @@ npm install
 Create a `.env` file in the root directory and set the following environment variables:
 
 ```bash
-MONGO_URI=your_mongodb_connection_string
-PORT=5000
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_DB_URL=
+PORT=
+WEBSITE_URL=
 ```
 
-Replace `your_mongodb_connection_string` with your MongoDB connection URI.
+Replace the Supabase values with your actual Supabase project credentials.
 
-### 4. Run the Development Server
+### 4. Run Database Migrations
+
+```bash
+npm run migrate
+```
+
+### 5. Run the Development Server
 
 ```bash
 npm run devStart

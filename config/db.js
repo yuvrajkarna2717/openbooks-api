@@ -1,13 +1,7 @@
-import { mongoose } from "mongoose";
+import knex from 'knex';
+import knexConfig from '../knexfile.js';
 
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1); // Exit process with failure
-  }
-};
+const environment = process.env.NODE_ENV || 'development';
+const db = knex(knexConfig[environment]);
 
-export { connectDB };
+export default db;

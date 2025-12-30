@@ -10,7 +10,8 @@ import {
 
 const scrapeBookDetailsAndSaveToDB = async (req, res) => {
   try {
-    const allBooksDetails = await scrapeSinglePage(1);
+    // const allBooksDetails = await scrapeSinglePage(1);
+    const allBooksDetails = await scrape();
 
     const sanitizedData = await sanitizeAllBookDetails(allBooksDetails);
 
