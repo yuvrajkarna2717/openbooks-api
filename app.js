@@ -19,7 +19,11 @@ import { fetchBookFromDBController } from "./routes/books-from-db.routes.js";
 dotenv.config();
 
 // Validate required environment variables
-const requiredEnvVars = ['SUPABASE_URL', 'SUPABASE_ANON_KEY', 'SUPABASE_DB_URL'];
+const requiredEnvVars = [
+  "SUPABASE_URL",
+  "SUPABASE_ANON_KEY",
+  "SUPABASE_DB_URL",
+];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     console.error(`Missing required environment variable: ${envVar}`);
@@ -40,7 +44,7 @@ app.use("/api/scrape", bookController);
 app.use("/api/fetch", fetchBookFromDBController);
 
 // Health check
-app.get("/healthz", (req, res) => {
+app.get("/health", (_req, res) => {
   res.json({
     status: "success",
     message: "All APIs are working fine.",
@@ -49,11 +53,11 @@ app.get("/healthz", (req, res) => {
 });
 
 // Root endpoint
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({
-    message: `Welcome to OpenBooks API - Scraping ${process.env.WEBSITE_URL}`,
+    message: `OpenBooks API – Public book data service`,
     docs: "/docs",
-    health: "/healthz"
+    health: "/health",
   });
 });
 
