@@ -59,11 +59,12 @@ npm install
 Create a `.env` file in the root directory and set the following environment variables:
 
 ```bash
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-SUPABASE_DB_URL=
-PORT=
-WEBSITE_URL=
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_DB_URL=postgresql://postgres:[password]@db.[project-ref].supabase.co:5432/postgres
+PORT=5000
+WEBSITE_URL=https://books.toscrape.com
+MAX_REQUEST_PER_IP=100
 ```
 
 Replace the Supabase values with your actual Supabase project credentials.

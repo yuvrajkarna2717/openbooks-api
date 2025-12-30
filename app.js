@@ -5,19 +5,31 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./docs/swagger.js";
 
-import { rateLimiter } from "./middlewares/rateLimiterMiddleWare.js";
+import { rateLimiter } from "./middlewares/rate-limit.middleware.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
+import { notFound } from "./middlewares/not-found.middleware.js";
 
 // book controller to scrape book details and save to DB
-import { bookController } from "./routes/scrapeBookRoutes.js";
+import { bookController } from "./routes/scrape-book.routes.js";
 
 // fetch book details from DB
-import { fetchBookFromDBController } from "./routes/booksFromDBRoutes.js";
+import { fetchBookFromDBController } from "./routes/books-from-db.routes.js";
 
 // Load environment variables
 dotenv.config();
 
-// Connect to MongoDB
-// connectDB();
+// Validate required environment variables
+const requiredEnvVars = [
+  "SUPABASE_URL",
+  "SUPABASE_ANON_KEY",
+  "SUPABASE_DB_URL",
+];
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    console.error(`Missing required environment variable: ${envVar}`);
+    process.exit(1);
+  }
+}
 
 const app = express();
 
@@ -27,54 +39,34 @@ app.use(rateLimiter);
 // Middleware
 app.use(express.json());
 
-// Scrape book details and store to MongoDB
+// Routes
 app.use("/api/scrape", bookController);
-
-// fetch book details from mongoDB
 app.use("/api/fetch", fetchBookFromDBController);
 
-// to check health
-app.get("/healthz", (req, res) => {
-  res.status(200).json({
+// Health check
+app.get("/health", (_req, res) => {
+  res.json({
     status: "success",
     message: "All APIs are working fine.",
     timestamp: new Date().toISOString(),
   });
 });
 
-// "/" it is just to give an idea that the project is up and running
-app.get("/", (req, res) => {
-  res.status(200).json({
-    status: 200,
-    message: `Welcome to ScrapeBackend-API, Here we are trying to build a backend with many api's fetching data from scrapping a website ${process.env.WEBSITE_URL}`,
-    exampleData: [
-      {
-        title: "A Light in the Attic",
-        price: "£51.77",
-        stock: "In Stock",
-        rating: "Three",
-        link: "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
-        stockInfo: "In stock (22 available)",
-        imageLink:
-          "https://books.toscrape.com/media/cache/fe/72/fe72f0532301ec28892ae79a629a293c.jpg",
-        __v: 0,
-        createdAt: {
-          $date: "2024-12-30T07:09:30.914Z",
-        },
-        updatedAt: {
-          $date: "2024-12-30T07:09:30.914Z",
-        },
-      },
-    ],
-    funFact: "api's are working fine.",
+// Root endpoint
+app.get("/", (_req, res) => {
+  res.json({
+    message: `OpenBooks API – Public book data service`,
+    docs: "/docs",
+    health: "/health",
   });
 });
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Error handling middleware (optional)
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
-});
+// 404 handler for unmatched routes
+app.use(notFound);
+
+// Error handling middleware
+app.use(errorHandler);
 
 export { app };

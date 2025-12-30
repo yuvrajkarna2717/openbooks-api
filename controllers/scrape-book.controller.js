@@ -1,12 +1,12 @@
 import {
   saveScrapeBookDetailsToDB,
   sanitizeAllBookDetails,
-} from "../utils/helper.js";
+} from "../utils/helper.util.js";
 import {
   scrape,
   scrapeSinglePage,
   scrapeFromPageXToPageY,
-} from "../utils/scrapper.js";
+} from "../utils/scraper.util.js";
 
 const scrapeBookDetailsAndSaveToDB = async (req, res) => {
   try {

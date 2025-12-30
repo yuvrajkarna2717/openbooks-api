@@ -3,7 +3,7 @@ import {
   scrapeBookDetailsAndSaveToDB,
   scrapeAllBookDetails,
   scrapeBookDetails,
-} from "../controllers/scrapeBookController.js";
+} from "../controllers/scrape-book.controller.js";
 
 const bookController = express.Router();
 

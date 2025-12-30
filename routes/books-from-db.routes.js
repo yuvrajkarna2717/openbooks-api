@@ -7,7 +7,7 @@ import {
   getBooksByRatingsRange,
   getBooksByLimit,
   getBooksBySorting,
-} from "../controllers/booksFromDBController.js";
+} from "../controllers/books-from-db.controller.js";
 
 const fetchBookFromDBController = express.Router();
 
@@ -95,12 +95,12 @@ fetchBookFromDBController.get("/books/price-range", getBooksByPriceRange);
  *     description: Fetch books within a given rating range.
  *     parameters:
  *       - in: query
- *         name: minRating
+ *         name: minR
  *         schema:
  *           type: integer
  *           example: 2
  *       - in: query
- *         name: maxRating
+ *         name: maxR
  *         schema:
  *           type: integer
  *           example: 5
@@ -155,11 +155,17 @@ fetchBookFromDBController.get("/books/limit", getBooksByLimit);
  *           example: price
  *         required: true
  *       - in: query
- *         name: order
+ *         name: orderBy
  *         schema:
  *           type: string
- *           enum: [asc, desc]
+ *           enum: [asc, dsc]
  *           example: asc
+ *         required: true
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           example: 10
  *         required: true
  *     responses:
  *       200:
