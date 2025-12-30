@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import { connectDB } from "./config/db.js";
+
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./docs/swagger.js";
 
 import { rateLimiter } from "./middlewares/rateLimiterMiddleWare.js";
 
@@ -9,17 +11,12 @@ import { bookController } from "./routes/scrapeBookRoutes.js";
 
 // fetch book details from DB
 import { fetchBookFromDBController } from "./routes/booksFromDBRoutes.js";
-import client from "./config/redis.js";
 
 // Load environment variables
 dotenv.config();
 
 // Connect to MongoDB
 // connectDB();
-
-// Connect Redis Client
-await client.connect()
-await client.set('foo','bar');
 
 const app = express();
 
@@ -70,6 +67,8 @@ app.get("/", (req, res) => {
     funFact: "api's are working fine.",
   });
 });
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {
