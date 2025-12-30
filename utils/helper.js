@@ -29,7 +29,7 @@ const sanitizeAllBookDetails = async (allBookDetails) => {
 
 const saveScrapeBookDetailsToDB = async (allBookDetails) => {
   try {
-    const savedBooks = await Book.insertMany(allBookDetails);
+    await Book.insertMany(allBookDetails);
     return { message: "success" };
   } catch (error) {
     return { message: "error", error: error.message };
