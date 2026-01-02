@@ -47,35 +47,37 @@ Rather than treating scraping as the end goal, this project models how productio
 
 ![Swagger API Documentation](./assets/swagger-api-docs.png)
 
-### Core Fetch APIs
+### 🔹 Primary Endpoint (Does Most of the Work)
 
-* `GET /api/fetch/all-books`
-  Returns all books with optional pagination and filtering.
+```http
+GET /api/fetch/books
+```
 
-* `GET /api/fetch/books/title?title=search`
-  Search books by title with case-insensitive matching.
+Supports:
+* Pagination (`page`, `limit`)
+* Search (`q`)
+* Filtering (`minPrice`, `maxPrice`, `rating`, `inStock`)
+* Sorting (`sortBy`, `order`)
 
-* `GET /api/fetch/books/price-range?minPrice=10&maxPrice=50`
-  Filter books within specified price range.
+👉 This **single endpoint replaces ~15 narrow APIs**.
 
-* `GET /api/fetch/books/rating-range?minR=3&maxR=5`
-  Filter books by rating range.
+### 🔹 Secondary Endpoints (Conceptually Different)
 
-### Utility APIs
+**Resource**
+* `GET /api/fetch/books/:id` - Get single book
 
-* `GET /api/fetch/books/limit?limit=10`
-  Paginate results with specified limit.
+**Aggregations / Analytics**
+* `GET /api/fetch/books/stats` - Collection statistics
+* `GET /api/fetch/books/stats/ratings` - Rating distribution
 
-* `GET /api/fetch/books/sort?sortBy=price&orderBy=asc&limit=20`
-  Sort books by price or rating with pagination.
+**Utility / Platform**
+* `GET /api/fetch/books/random` - Random book
+* `GET /api/meta` - API metadata
+* `GET /healthz` - Health check
 
-### Data Ingestion APIs
-
-* `POST /api/scrape/save/all-books-details`
-  Scrape and persist book data to database.
-
-* `GET /api/scrape/all-books-details`
-  Scrape and return data without persistence.
+**Data Ingestion**
+* Automated via GitHub Actions (weekly)
+* Manual execution: `npm run refresh-data`
 
 > The API surface is intentionally kept small and expressive to reflect real-world REST API design.
 

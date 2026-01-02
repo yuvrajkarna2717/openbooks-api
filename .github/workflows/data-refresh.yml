@@ -1,0 +1,94 @@
+name: Weekly Data Refresh
+
+on:
+  schedule:
+    # Runs every Sunday at 2:00 AM IST (8:30 PM UTC Saturday)
+    - cron: '30 20 * * 6'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  refresh-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install Puppeteer dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ca-certificates \
+          fonts-liberation \
+          libappindicator3-1 \
+          libasound2 \
+          libatk-bridge2.0-0 \
+          libatk1.0-0 \
+          libc6 \
+          libcairo2 \
+          libcups2 \
+          libdbus-1-3 \
+          libexpat1 \
+          libfontconfig1 \
+          libgbm1 \
+          libgcc1 \
+          libglib2.0-0 \
+          libgtk-3-0 \
+          libnspr4 \
+          libnss3 \
+          libpango-1.0-0 \
+          libpangocairo-1.0-0 \
+          libstdc++6 \
+          libx11-6 \
+          libx11-xcb1 \
+          libxcb1 \
+          libxcomposite1 \
+          libxcursor1 \
+          libxdamage1 \
+          libxext6 \
+          libxfixes3 \
+          libxi6 \
+          libxrandr2 \
+          libxrender1 \
+          libxss1 \
+          libxtst6 \
+          lsb-release \
+          wget \
+          xdg-utils
+          
+    - name: Run database migrations
+      run: npm run migrate
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+        
+    - name: Refresh book data
+      run: node scripts/refresh-data.js
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+        
+    - name: Notify on success
+      if: success()
+      run: |
+        echo "✅ Data refresh completed successfully!"
+        echo "📊 Check the logs above for detailed statistics"
+        
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "❌ Data refresh failed!"
+        echo "🔍 Check the logs above for error details"
