@@ -3,6 +3,8 @@
 import dotenv from 'dotenv';
 import { ingestAllBooks } from '../utils/data-ingestion.util.js';
 import { sanitizeAllBookDetails, saveIngestedBookDetailsToDB, clearAllBooks } from '../utils/data-processor.util.js';
+import { cache } from '../utils/cache.util.js';
+import redisClient from '../config/redis.config.js';
 
 dotenv.config();
 
@@ -24,6 +26,14 @@ const refreshBookData = async () => {
     // Validate environment
     validateEnvironment();
     console.log('✅ Environment validation passed');
+
+    // Initialize Redis (optional for data refresh)
+    try {
+      await redisClient.connect();
+      console.log('✅ Redis connected for cache invalidation');
+    } catch (error) {
+      console.warn('⚠️ Redis connection failed, continuing without cache invalidation');
+    }
 
     // Step 1: Scrape all book data
     console.log('\n📖 Step 1: Scraping book data...');
@@ -64,6 +74,19 @@ const refreshBookData = async () => {
     }
     
     console.log(`✅ Successfully saved ${saveResult.count} books to database`);
+
+    // Step 5: Invalidate cache
+    console.log('\n🧹 Step 5: Invalidating cache...');
+    try {
+      if (redisClient.isReady()) {
+        await cache.clear();
+        console.log('✅ Cache invalidated successfully');
+      } else {
+        console.log('⚠️ Redis not available, skipping cache invalidation');
+      }
+    } catch (error) {
+      console.warn('⚠️ Cache invalidation failed:', error.message);
+    }
 
     // Success summary
     const duration = Math.round((Date.now() - startTime) / 1000);

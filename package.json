@@ -11,6 +11,7 @@
     "migrate": "knex --knexfile database.config.js migrate:latest",
     "migrate:rollback": "knex --knexfile database.config.js migrate:rollback",
     "refresh-data": "node scripts/refresh-data.js",
+    "test-redis": "node scripts/test-redis.js",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage"
@@ -40,6 +41,7 @@
     "knex": "^3.1.0",
     "pg": "^8.16.3",
     "puppeteer": "^23.1.0",
+    "redis": "^5.10.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },

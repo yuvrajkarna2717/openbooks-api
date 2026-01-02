@@ -6,6 +6,12 @@ import {
   getRatingStats,
   getRandomBook
 } from "../controllers/books.controller.js";
+import {
+  booksCacheMiddleware,
+  bookByIdCacheMiddleware,
+  statsCacheMiddleware,
+  randomCacheMiddleware
+} from "../middlewares/cache.middleware.js";
 
 const bookController = express.Router();
 
@@ -73,7 +79,7 @@ const bookController = express.Router();
  *       200:
  *         description: Books retrieved successfully
  */
-bookController.get("/books", getBooks);
+bookController.get("/books", booksCacheMiddleware, getBooks);
 
 /**
  * @swagger
@@ -93,7 +99,7 @@ bookController.get("/books", getBooks);
  *       404:
  *         description: Book not found
  */
-bookController.get("/books/:id", getBookById);
+bookController.get("/books/:id", bookByIdCacheMiddleware, getBookById);
 
 /**
  * @swagger
@@ -105,7 +111,7 @@ bookController.get("/books/:id", getBookById);
  *       200:
  *         description: Statistics retrieved successfully
  */
-bookController.get("/books/stats", getBookStats);
+bookController.get("/books/stats", statsCacheMiddleware, getBookStats);
 
 /**
  * @swagger
@@ -117,7 +123,7 @@ bookController.get("/books/stats", getBookStats);
  *       200:
  *         description: Rating statistics retrieved successfully
  */
-bookController.get("/books/stats/ratings", getRatingStats);
+bookController.get("/books/stats/ratings", statsCacheMiddleware, getRatingStats);
 
 /**
  * @swagger
@@ -129,6 +135,6 @@ bookController.get("/books/stats/ratings", getRatingStats);
  *       200:
  *         description: Random book retrieved successfully
  */
-bookController.get("/books/random", getRandomBook);
+bookController.get("/books/random", randomCacheMiddleware, getRandomBook);
 
 export { bookController };
