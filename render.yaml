@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: openbooks-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    branch: main
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SUPABASE_URL
+        fromSecret: SUPABASE_URL
+      - key: SUPABASE_ANON_KEY
+        fromSecret: SUPABASE_ANON_KEY
+      - key: SUPABASE_DB_URL
+        fromSecret: SUPABASE_DB_URL
+      - key: WEBSITE_URL
+        value: https://books.toscrape.com
+      - key: MAX_REQUEST_PER_IP
+        value: 1000
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: openbooks-redis
+          property: connectionString
+
+  - type: redis
+    name: openbooks-redis
+    plan: free
+    region: oregon
+    maxmemoryPolicy: allkeys-lru
