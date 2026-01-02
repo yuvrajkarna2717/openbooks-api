@@ -76,8 +76,8 @@ Supports:
 * `GET /healthz` - Health check
 
 **Data Ingestion**
-* `POST /api/scrape/save/all-books-details` - Scrape and save
-* `GET /api/scrape/all-books-details` - Scrape without saving
+* Automated via GitHub Actions (weekly)
+* Manual execution: `npm run refresh-data`
 
 > The API surface is intentionally kept small and expressive to reflect real-world REST API design.
 

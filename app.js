@@ -10,7 +10,7 @@ import { errorHandler } from "./middlewares/error.middleware.js";
 import { notFound } from "./middlewares/not-found.middleware.js";
 
 // fetch book details from DB
-import { fetchBookFromDBController } from "./routes/books.routes.js";
+import { bookController } from "./routes/books.routes.js";
 
 // meta information
 import { metaController } from "./routes/meta.routes.js";
@@ -47,7 +47,7 @@ app.get("/", rootroute);
 app.get("/health", healthCheck);
 
 // Routes
-app.use("/api/fetch", fetchBookFromDBController);
+app.use("/api/fetch", bookController);
 app.use("/api/meta", metaController);
 
 // Swagger API documentation
