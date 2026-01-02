@@ -17,6 +17,16 @@ export default {
       directory: './seeds'
     }
   },
+  test: {
+    client: 'pg',
+    connection: {
+      connectionString: process.env.SUPABASE_DB_URL,
+      ssl: { rejectUnauthorized: false }
+    },
+    migrations: {
+      directory: './migrations'
+    }
+  },
   production: {
     client: 'pg',
     connection: {

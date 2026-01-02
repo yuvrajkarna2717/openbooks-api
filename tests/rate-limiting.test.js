@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "../app.js";
+import { app } from "../server.js";
 import { describe, it, expect } from "vitest";
 
 describe("Rate Limiting Tests", () => {
