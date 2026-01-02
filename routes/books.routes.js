@@ -7,7 +7,7 @@ import {
   getRandomBook
 } from "../controllers/books.controller.js";
 
-const fetchBookFromDBController = express.Router();
+const bookController = express.Router();
 
 /**
  * @swagger
@@ -73,7 +73,7 @@ const fetchBookFromDBController = express.Router();
  *       200:
  *         description: Books retrieved successfully
  */
-fetchBookFromDBController.get("/books", getBooks);
+bookController.get("/books", getBooks);
 
 /**
  * @swagger
@@ -93,7 +93,7 @@ fetchBookFromDBController.get("/books", getBooks);
  *       404:
  *         description: Book not found
  */
-fetchBookFromDBController.get("/books/:id", getBookById);
+bookController.get("/books/:id", getBookById);
 
 /**
  * @swagger
@@ -105,7 +105,7 @@ fetchBookFromDBController.get("/books/:id", getBookById);
  *       200:
  *         description: Statistics retrieved successfully
  */
-fetchBookFromDBController.get("/books/stats", getBookStats);
+bookController.get("/books/stats", getBookStats);
 
 /**
  * @swagger
@@ -117,7 +117,7 @@ fetchBookFromDBController.get("/books/stats", getBookStats);
  *       200:
  *         description: Rating statistics retrieved successfully
  */
-fetchBookFromDBController.get("/books/stats/ratings", getRatingStats);
+bookController.get("/books/stats/ratings", getRatingStats);
 
 /**
  * @swagger
@@ -129,6 +129,6 @@ fetchBookFromDBController.get("/books/stats/ratings", getRatingStats);
  *       200:
  *         description: Random book retrieved successfully
  */
-fetchBookFromDBController.get("/books/random", getRandomBook);
+bookController.get("/books/random", getRandomBook);
 
-export { fetchBookFromDBController };
+export { bookController };
