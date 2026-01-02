@@ -9,6 +9,9 @@ import { rateLimiter } from "./middlewares/rate-limit.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { notFound } from "./middlewares/not-found.middleware.js";
 
+// Redis connection
+import redisClient from "./config/redis.config.js";
+
 // fetch book details from DB
 import { bookController } from "./routes/books.routes.js";
 
@@ -34,6 +37,11 @@ for (const envVar of requiredEnvVars) {
     process.exit(1);
   }
 }
+
+// Initialize Redis connection
+redisClient.connect().catch(err => {
+  console.warn('Redis connection failed, continuing without cache:', err.message);
+});
 
 const app = express();
 
