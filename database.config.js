@@ -4,12 +4,7 @@ dotenv.config();
 export default {
   development: {
     client: 'pg',
-    connection: {
-      connectionString: process.env.SUPABASE_DB_URL,
-      ssl: { rejectUnauthorized: false },
-      // Force IPv4 in Docker
-      host: process.env.SUPABASE_DB_URL ? new URL(process.env.SUPABASE_DB_URL).hostname : 'localhost'
-    },
+    connection: process.env.SUPABASE_DB_URL,
     migrations: {
       directory: './migrations'
     },
@@ -19,10 +14,7 @@ export default {
   },
   production: {
     client: 'pg',
-    connection: {
-      connectionString: process.env.SUPABASE_DB_URL,
-      ssl: { rejectUnauthorized: false }
-    },
+    connection: process.env.SUPABASE_DB_URL,
     migrations: {
       directory: './migrations'
     }

@@ -12,10 +12,6 @@
     "migrate:rollback": "knex --knexfile database.config.js migrate:rollback",
     "refresh-data": "node scripts/refresh-data.js",
     "test-redis": "node scripts/test-redis.js",
-    "docker:build": "docker build -t openbooks-api .",
-    "docker:dev": "docker-compose up --build",
-    "docker:prod": "docker-compose -f docker-compose.prod.yml up --build",
-    "docker:down": "docker-compose down",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage"
