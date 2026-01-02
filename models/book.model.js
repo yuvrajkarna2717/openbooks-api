@@ -64,6 +64,11 @@ class Book {
   static async insertMany(books) {
     return await db('books').insert(books);
   }
+
+  static async deleteAll() {
+    const deletedCount = await db('books').del();
+    return deletedCount;
+  }
 }
 
 export default Book;
