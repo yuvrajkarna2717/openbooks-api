@@ -8,8 +8,8 @@
   "scripts": {
     "devStart": "nodemon server.js",
     "start": "node server.js",
-    "migrate": "knex migrate:latest",
-    "migrate:rollback": "knex migrate:rollback",
+    "migrate": "knex --knexfile database.config.js migrate:latest",
+    "migrate:rollback": "knex --knexfile database.config.js migrate:rollback",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage"

@@ -3,17 +3,18 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./docs/swagger.js";
+import swaggerSpec from "./docs/api-docs.config.js";
 
 import { rateLimiter } from "./middlewares/rate-limit.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { notFound } from "./middlewares/not-found.middleware.js";
 
-// book controller to scrape book details and save to DB
-import { bookController } from "./routes/scrape-book.routes.js";
-
 // fetch book details from DB
-import { fetchBookFromDBController } from "./routes/books-from-db.routes.js";
+import { fetchBookFromDBController } from "./routes/books.routes.js";
+
+// meta information
+import { metaController } from "./routes/meta.routes.js";
+import { healthCheck, rootroute } from "./controllers/health.controller.js";
 
 // Load environment variables
 dotenv.config();
@@ -39,28 +40,17 @@ app.use(rateLimiter);
 // Middleware
 app.use(express.json());
 
-// Routes
-app.use("/api/scrape", bookController);
-app.use("/api/fetch", fetchBookFromDBController);
+// Root endpoint
+app.get("/", rootroute);
 
 // Health check
-app.get("/health", (_req, res) => {
-  res.json({
-    status: "success",
-    message: "All APIs are working fine.",
-    timestamp: new Date().toISOString(),
-  });
-});
+app.get("/health", healthCheck);
 
-// Root endpoint
-app.get("/", (_req, res) => {
-  res.json({
-    message: `OpenBooks API – Public book data service`,
-    docs: "/docs",
-    health: "/health",
-  });
-});
+// Routes
+app.use("/api/fetch", fetchBookFromDBController);
+app.use("/api/meta", metaController);
 
+// Swagger API documentation
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 404 handler for unmatched routes
