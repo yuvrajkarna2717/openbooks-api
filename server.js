@@ -24,24 +24,28 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
-// Validate required environment variables
-const requiredEnvVars = [
-  "PORT",
-  "SUPABASE_URL",
-  "SUPABASE_ANON_KEY",
-  "SUPABASE_DB_URL",
-];
-for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    console.error(`Missing required environment variable: ${envVar}`);
-    process.exit(1);
+// Validate required environment variables (skip in test environment)
+if (process.env.NODE_ENV !== 'test') {
+  const requiredEnvVars = [
+    "PORT",
+    "SUPABASE_URL",
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_DB_URL",
+  ];
+  for (const envVar of requiredEnvVars) {
+    if (!process.env[envVar]) {
+      console.error(`Missing required environment variable: ${envVar}`);
+      process.exit(1);
+    }
   }
 }
 
-// Initialize Redis connection
-redisClient.connect().catch(err => {
-  console.warn('Redis connection failed, continuing without cache:', err.message);
-});
+// Initialize Redis connection (skip in test environment)
+if (process.env.NODE_ENV !== 'test') {
+  redisClient.connect().catch(err => {
+    console.warn('Redis connection failed, continuing without cache:', err.message);
+  });
+}
 
 const app = express();
 
