@@ -19,6 +19,23 @@ jobs:
           sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
           sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
 
+      - name: Validate environment variables
+        run: |
+          echo "Checking environment variables..."
+          if [ -z "$SUPABASE_URL" ]; then
+            echo "❌ SUPABASE_URL is not set!"
+            exit 1
+          fi
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "❌ SUPABASE_DB_URL is not set!"
+            exit 1
+          fi
+          echo "✅ Environment variables are set"
+          echo "Database host: $(echo $SUPABASE_DB_URL | cut -d'@' -f2 | cut -d':' -f1)"
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
