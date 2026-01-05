@@ -7,7 +7,7 @@ export default {
     connection: {
       connectionString: process.env.SUPABASE_DB_URL,
       ssl: { rejectUnauthorized: false },
-      // Force IPv4 in Docker
+      // Force IPv4 in Docker and CI
       host: process.env.SUPABASE_DB_URL ? new URL(process.env.SUPABASE_DB_URL).hostname : 'localhost'
     },
     migrations: {
@@ -20,7 +20,7 @@ export default {
   test: {
     client: 'pg',
     connection: {
-      connectionString: process.env.SUPABASE_DB_URL,
+      connectionString: process.env.SUPABASE_DB_URL + '?family=4',
       ssl: { rejectUnauthorized: false }
     },
     migrations: {
@@ -30,7 +30,7 @@ export default {
   production: {
     client: 'pg',
     connection: {
-      connectionString: process.env.SUPABASE_DB_URL,
+      connectionString: process.env.SUPABASE_DB_URL + '?family=4',
       ssl: { rejectUnauthorized: false }
     },
     migrations: {
