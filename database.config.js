@@ -30,8 +30,13 @@ export default {
   production: {
     client: 'pg',
     connection: {
-      connectionString: process.env.SUPABASE_DB_URL + '?family=4',
-      ssl: { rejectUnauthorized: false }
+      host: process.env.SUPABASE_DB_URL ? new URL(process.env.SUPABASE_DB_URL).hostname : 'localhost',
+      port: process.env.SUPABASE_DB_URL ? new URL(process.env.SUPABASE_DB_URL).port : 5432,
+      user: process.env.SUPABASE_DB_URL ? decodeURIComponent(new URL(process.env.SUPABASE_DB_URL).username) : 'postgres',
+      password: process.env.SUPABASE_DB_URL ? decodeURIComponent(new URL(process.env.SUPABASE_DB_URL).password) : '',
+      database: process.env.SUPABASE_DB_URL ? new URL(process.env.SUPABASE_DB_URL).pathname.slice(1) : 'postgres',
+      ssl: { rejectUnauthorized: false },
+      family: 4 // Force IPv4
     },
     migrations: {
       directory: './migrations'
