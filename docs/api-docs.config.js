@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: process.env.NODE_ENV === 'production' ? 'https://scrapebackend-api.onrender.com' : 'http://localhost:5000',
+        url: process.env.NODE_ENV === 'production' ? 'https://openbooks-api-ctit.onrender.com/' : 'http://localhost:5000',
         description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server',
       },
     ],
